@@ -23,7 +23,6 @@
             padding: 0 15px 50px 15px;
         }
 
-        /* 置頂懸浮標題列 */
         .top-bar {
             position: sticky;
             top: 0;
@@ -51,7 +50,6 @@
 
         h2 { font-size: 1.1rem; border-left: 5px solid var(--accent-color); padding-left: 10px; margin-top: 0; margin-bottom: 15px; color: white; }
 
-        /* 搜尋列 */
         .search-box {
             width: 100%;
             padding: 15px;
@@ -65,7 +63,6 @@
         }
         .search-box:focus { border-color: var(--accent-color); }
 
-        /* Class 1-9 參考圖例區塊 */
         .class-ref-container {
             margin-top: 20px;
             border-top: 1px dashed #444;
@@ -92,7 +89,6 @@
             font-weight: bold;
         }
 
-        /* 100% 離線版 UN 菱形牌 (純 CSS 繪製) */
         .un-diamond {
             width: 45px;
             height: 45px;
@@ -105,7 +101,7 @@
         .un-content {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            transform: rotate(-45deg); /* 將內容轉正 */
+            transform: rotate(-45deg);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -116,20 +112,16 @@
         .un-sym { font-size: 1.1rem; line-height: 1.2; }
         .un-num { font-size: 0.95rem; font-weight: 900; line-height: 1; }
 
-        /* UN 菱形牌顏色與條紋設定 (-45deg 抵銷外框旋轉) */
         .un-c1 { background: #ff9800; color: black; border-color: #ff9800; }
         .un-c2 { background: #4caf50; color: white; border-color: #4caf50; }
         .un-c3 { background: #f44336; color: white; border-color: #f44336; }
         .un-c4 { background: repeating-linear-gradient(-45deg, #f44336, #f44336 6px, white 6px, white 12px); color: black; border-color: #ccc; }
-        .un-c4 .un-num { background: rgba(255,255,255,0.9); border-radius: 50%; padding: 0 4px; }
         .un-c5 { background: #ffeb3b; color: black; border-color: #ffeb3b; }
         .un-c6 { background: white; color: black; border-color: #ccc; }
         .un-c7 { background: linear-gradient(-45deg, #ffeb3b 50%, white 50%); color: black; border-color: #ccc; }
         .un-c8 { background: linear-gradient(-45deg, white 50%, black 50%); color: white; border-color: #ccc; }
-        .un-c8 .un-sym { color: black; }
         .un-c9 { background: linear-gradient(-45deg, transparent 50%, white 50%), repeating-linear-gradient(-45deg, black, black 4px, white 4px, white 8px); color: black; border-color: #ccc; }
 
-        /* 搜尋建議列表 */
         #search-results { margin-top: 10px; display: none; }
         .result-item {
             padding: 12px 15px;
@@ -138,15 +130,11 @@
             cursor: pointer;
             font-size: 1.1rem;
         }
-        .result-item:first-child { border-radius: 8px 8px 0 0; }
-        .result-item:last-child { border-radius: 0 0 8px 8px; border-bottom: none; }
         .result-item:active { background: var(--accent-color); color: black; }
         .badge-un { background: #ff9800; color: black; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 0.9rem; margin-right: 8px; }
 
-        /* 內容顯示區 - 預設隱藏 */
         #detail-view { display: none; }
 
-        /* NFPA 704 菱形圖與圖例區塊 */
         .nfpa-wrapper {
             display: flex;
             align-items: center;
@@ -158,8 +146,7 @@
             border-radius: 12px;
         }
         .nfpa-diamond {
-            width: 100px;
-            height: 100px;
+            width: 100px; height: 100px;
             position: relative;
             transform: rotate(45deg);
             flex-shrink: 0;
@@ -170,16 +157,15 @@
             font-size: 1.5rem; font-weight: 900; color: black;
             transform: rotate(-45deg); 
         }
-        .nfpa-red { background: #f44336; top: 0; left: 0; border: 2px solid white; border-bottom: none; border-right: none;}
-        .nfpa-blue { background: #2196f3; top: 0; right: 0; border: 2px solid white; border-bottom: none; border-left: none; color: white;}
-        .nfpa-yellow { background: #ffeb3b; bottom: 0; left: 0; border: 2px solid white; border-top: none; border-right: none;}
-        .nfpa-white { background: #ffffff; bottom: 0; right: 0; border: 2px solid white; border-top: none; border-left: none; font-size: 1.1rem;}
+        .nfpa-red { background: #f44336; top: 0; left: 0; border: 2px solid white; }
+        .nfpa-blue { background: #2196f3; top: 0; right: 0; border: 2px solid white; color: white;}
+        .nfpa-yellow { background: #ffeb3b; bottom: 0; left: 0; border: 2px solid white; }
+        .nfpa-white { background: #ffffff; bottom: 0; right: 0; border: 2px solid white; font-size: 1.1rem;}
 
         .nfpa-legend { display: flex; flex-direction: column; gap: 8px; }
         .legend-item { display: flex; align-items: center; gap: 8px; font-weight: bold; font-size: 0.95rem; }
         .color-box { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.3); }
 
-        /* 資料列設計 */
         .data-row {
             background: #222;
             padding: 12px;
@@ -222,12 +208,10 @@
         <button class="reset-btn-top" onclick="resetSearch()" style="background:#444; color:white; border:none; padding:8px 12px; border-radius:6px; font-weight:bold;">清除</button>
     </div>
 
-    <!-- 檢索區 -->
     <div class="card" id="search-card">
         <input type="text" id="search-input" class="search-box" placeholder="輸入 UN編號、中文或 CAS..." oninput="handleSearch()" inputmode="search">
         <div id="search-results"></div>
 
-        <!-- 聯合國運輸危害分類參考 (純 CSS 繪製 100%離線版) -->
         <div class="class-ref-container">
             <div class="class-ref-title">聯合國/交通部 運輸危害分類參考</div>
             <div class="class-ref-grid">
@@ -271,20 +255,17 @@
         </div>
     </div>
 
-    <!-- 戰術資訊卡 -->
     <div id="detail-view" class="card">
         <h2 id="d-name" style="font-size: 1.4rem; color: var(--accent-color);">化學品名稱</h2>
         <div style="color: #aaa; margin-bottom: 15px;">CAS: <span id="d-cas"></span> | 類別: <span id="d-class" class="class-badge"></span></div>
-        
         <hr style="border-color: #333;">
 
-        <!-- NFPA 704 區塊 -->
         <div class="nfpa-wrapper">
             <div class="nfpa-diamond">
-                <div class="nfpa-quad nfpa-red"><span id="nfpa-f">3</span></div>
-                <div class="nfpa-quad nfpa-blue"><span id="nfpa-h">3</span></div>
-                <div class="nfpa-quad nfpa-yellow"><span id="nfpa-r">1</span></div>
-                <div class="nfpa-quad nfpa-white"><span id="nfpa-s"><s>W</s></span></div>
+                <div class="nfpa-quad nfpa-red"><span id="nfpa-f"></span></div>
+                <div class="nfpa-quad nfpa-blue"><span id="nfpa-h"></span></div>
+                <div class="nfpa-quad nfpa-yellow"><span id="nfpa-r"></span></div>
+                <div class="nfpa-quad nfpa-white"><span id="nfpa-s"></span></div>
             </div>
             <div class="nfpa-legend">
                 <div class="legend-item" style="color: #64b5f6;"><div class="color-box" style="background:#2196f3;"></div> 健康 (藍)</div>
@@ -298,22 +279,18 @@
             <div class="data-label">GHS 危害標示</div>
             <div id="d-ghs" style="margin-top: 5px;"></div>
         </div>
-
         <div class="data-row">
             <div class="data-label">ERG 指南編號</div>
             <div class="data-value">Guide <span id="d-guide" style="color:var(--accent-color); font-size:1.3rem;"></span></div>
         </div>
-
         <div class="data-row warn-high">
             <div class="data-label">隔離與疏散距離 (初期)</div>
             <div class="data-value" id="d-iso"></div>
         </div>
-
         <div class="data-row warn-high">
             <div class="data-label">滅火與禁忌注意事項</div>
             <div class="data-value" id="d-tactics"></div>
         </div>
-
         <div class="data-row">
             <div class="data-label">ISO 裝備要求 (PPE)</div>
             <div class="data-value" id="d-ppe"></div>
@@ -321,8 +298,6 @@
     </div>
 
     <script>
-// --- HCFD 現場安全決策資料庫 (100項高頻物質版) ---
-// HCFD 危害辨識資料庫 - 完整 100 項合併版
 const db = [
     { un: "1219", nameTW: "異丙醇 (IPA)", nameEN: "Isopropanol", cas: "67-63-0", class: "3", nfpa: { h: "1", f: "3", r: "0", s: "" }, ghs: ["🔥,⚠️"], erg: "129", isolation: "50m", tactics: "抗溶性泡沫。與水互溶。", ppe: "消防衣+SCBA" },
     { un: "1090", nameTW: "丙酮", nameEN: "Acetone", cas: "67-64-1", class: "3", nfpa: { h: "1", f: "3", r: "0", s: "" }, ghs: ["🔥,⚠️"], erg: "127", isolation: "50m", tactics: "抗溶性泡沫。極易燃，注意回火。", ppe: "消防衣+SCBA" },
@@ -412,7 +387,7 @@ const db = [
     { un: "1026", nameTW: "氰 (氣體)", nameEN: "Cyanogen", cas: "460-19-5", class: "2.3", nfpa: { h: "4", f: "4", r: "2", s: "" }, ghs: ["🔥,☠️"], erg: "119", isolation: "100m", tactics: "極毒易燃。類似氰化物效應。", ppe: "A級氣密衣" },
     { un: "1604", nameTW: "乙二胺", nameEN: "Ethylenediamine", cas: "107-15-3", class: "8", nfpa: { h: "3", f: "2", r: "0", s: "" }, ghs: ["🔥,☢️,⚠️"], erg: "132", isolation: "50m", tactics: "腐蝕性。易燃。抗溶性泡沫。", ppe: "B級/消防衣" },
     { un: "1689", nameTW: "氰化鈉", nameEN: "Sodium cyanide", cas: "143-33-9", class: "6.1", nfpa: { h: "3", f: "0", r: "0", s: "" }, ghs: ["☠️"], erg: "157", isolation: "25m", tactics: "劇毒。嚴禁混酸(生劇毒氣體)。", ppe: "B級/A級" },
-    { un: "1802", nameTW: "高氯酸", nameEN: "Perchloric acid", cas: "7601-90-3", class: "8", nfpa: { h: "3", f: "0", r: "3", s: "OX" }, ghs: ["🔥,☢️,⭕"], erg: "140", isolation: "50m", tactics: "強氧化。受熱撞擊爆炸。大量水。", ppe: "B級/A級" },
+    { un: "1802", nameTW: "高氯酸", nameEN: "Perchloric acid", cas: "7601-90-3", class: "8", nfpa: { h: "3", f: "0", r: "3", s: "OX" }, ghs: ["🔥,☢️,⭕"], erg: "140", isolation: "50m", tactics: "強氧化劑。受熱撞擊爆炸。大量水。", ppe: "B級/A級" },
     { un: "1829", nameTW: "三氧化硫", nameEN: "Sulfur trioxide", cas: "7446-11-9", class: "8", nfpa: { h: "3", f: "0", r: "2", s: "W" }, ghs: ["☢️"], erg: "137", isolation: "50m", tactics: "遇水劇烈反應生硫酸霧。禁射水。", ppe: "A級氣密衣" },
     { un: "2015", nameTW: "高濃度雙氧水", nameEN: "Hydrogen peroxide, stab.", cas: "7722-84-1", class: "5.1", nfpa: { h: "3", f: "0", r: "3", s: "OX" }, ghs: ["🔥,☢️,⭕"], erg: "143", isolation: "50m", tactics: "極強氧化。分解爆炸。大量水。", ppe: "B級/A級" },
     { un: "2211", nameTW: "聚苯乙烯珠", nameEN: "Polymeric beads", cas: "N/A", class: "9", nfpa: { h: "1", f: "2", r: "0", s: "" }, ghs: ["⚠️"], erg: "133", isolation: "25m", tactics: "釋放易燃蒸氣(戊烷)。注意通風。", ppe: "消防衣+SCBA" },
@@ -425,7 +400,7 @@ const db = [
     { un: "1104", nameTW: "乙酸戊酯", nameEN: "Amyl acetates", cas: "628-63-7", class: "3", nfpa: { h: "1", f: "3", r: "0", s: "" }, ghs: ["🔥"], erg: "129", isolation: "50m", tactics: "香蕉油。一般泡沫。易燃。", ppe: "消防衣+SCBA" },
     { un: "1992", nameTW: "易燃液體毒性", nameEN: "Flammable liq, toxic", cas: "N/A", class: "3", nfpa: { h: "3", f: "3", r: "0", s: "" }, ghs: ["🔥,☠️"], erg: "131", isolation: "100m", tactics: "複合危害。需同時防燃與防毒。", ppe: "B級/消防衣" }
 ];
-    
+
         const inputEl = document.getElementById('search-input');
         const resultsEl = document.getElementById('search-results');
         const detailEl = document.getElementById('detail-view');
@@ -433,19 +408,16 @@ const db = [
         function handleSearch() {
             const query = inputEl.value.trim().toLowerCase();
             resultsEl.innerHTML = '';
-
             if (query.length < 1) {
                 resultsEl.style.display = 'none';
                 return;
             }
-
             const matches = db.filter(item => 
                 item.un.includes(query) || 
                 item.nameTW.includes(query) || 
                 item.nameEN.toLowerCase().includes(query) ||
-                item.cas.includes(query)
+                (item.cas && item.cas.includes(query))
             );
-
             if (matches.length > 0) {
                 resultsEl.style.display = 'block';
                 matches.forEach(item => {
@@ -465,11 +437,10 @@ const db = [
             inputEl.value = item.nameTW;
             resultsEl.style.display = 'none';
             detailEl.style.display = 'block';
-            
             document.querySelector('.class-ref-container').style.display = 'none';
 
             document.getElementById('d-name').innerText = `[UN ${item.un}] ${item.nameTW}`;
-            document.getElementById('d-cas').innerText = item.cas;
+            document.getElementById('d-cas').innerText = item.cas || "N/A";
             document.getElementById('d-class').innerText = `Class ${item.class}`;
 
             document.getElementById('nfpa-h').innerText = item.nfpa.h;
@@ -479,15 +450,18 @@ const db = [
 
             const ghsBox = document.getElementById('d-ghs');
             ghsBox.innerHTML = '';
-            item.ghs.forEach(g => {
-                ghsBox.innerHTML += `<span class="ghs-badge">${g}</span>`;
+            // 優化：處理包含逗號的 GHS 字串，切割成獨立 Badge
+            const ghsArray = item.ghs[0].split(',');
+            ghsArray.forEach(g => {
+                if(g.trim()){
+                    ghsBox.innerHTML += `<span class="ghs-badge">${g.trim()}</span>`;
+                }
             });
 
             document.getElementById('d-guide').innerText = item.erg;
             document.getElementById('d-iso').innerText = item.isolation;
             document.getElementById('d-tactics').innerText = item.tactics;
             document.getElementById('d-ppe').innerText = item.ppe;
-
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
