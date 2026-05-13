@@ -400,82 +400,80 @@ function showDetail(item) {
             detailEl.style.display = 'block';
             document.getElementById('main-card').style.display = 'none';
             
-            // 🌟 1. 恢復原本的文字資訊，確保「CAS | 類別」同一行不會跑版
+            // 1. 恢復乾淨的基本資訊
             document.getElementById('d-name').innerText = `[UN ${item.un}] ${item.nameTW}`;
             document.getElementById('d-cas').innerText = item.cas || "N/A";
             document.getElementById('d-class').innerText = `Class ${item.class}`;
             
-            // 🌟 2. 隱藏舊的十字形 NFPA 數字欄位
+            // 2. 隱藏舊的十字形 NFPA 數字欄位
             ['nfpa-f', 'nfpa-h', 'nfpa-r', 'nfpa-s'].forEach(id => {
                 const el = document.getElementById(id);
-                if(el && el.parentElement) {
-                    el.parentElement.style.display = 'none';
+                if(el && el.parentElement) el.parentElement.style.display = 'none';
+            });
+
+            // 🌟 3. 自動大掃除：尋找並隱藏 HTML 中寫死的多餘舊註解
+            document.querySelectorAll('div, p, span').forEach(el => {
+                // 只要不是我們新生成的儀表板，且包含舊註解關鍵字，就將其隱藏
+                if (el.id !== 'hcfd-visual-dashboard' && !el.closest('#hcfd-visual-dashboard')) {
+                    if (el.innerText && el.innerText.includes('紅:易燃') && el.innerText.includes('白:特殊')) {
+                        el.style.display = 'none';
+                    }
                 }
             });
 
-            // 🌟 3. 取得「絕對不會破圖」的 SVG 原始運輸圖示
-            const placardUrls = {
-                "2.1": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Hazmat_Class_2-1.svg",
-                "2.2": "https://upload.wikimedia.org/wikipedia/commons/5/58/Hazmat_Class_2-2.svg",
-                "2.3": "https://upload.wikimedia.org/wikipedia/commons/8/87/Hazmat_Class_2-3.svg",
-                "3": "https://upload.wikimedia.org/wikipedia/commons/2/23/Hazmat_Class_3.svg",
-                "4.1": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Hazmat_Class_4-1.svg",
-                "4.2": "https://upload.wikimedia.org/wikipedia/commons/0/01/Hazmat_Class_4-2.svg",
-                "4.3": "https://upload.wikimedia.org/wikipedia/commons/5/52/Hazmat_Class_4-3.svg",
-                "5.1": "https://upload.wikimedia.org/wikipedia/commons/0/01/Hazmat_Class_5-1.svg",
-                "5.2": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Hazmat_Class_5-2.svg",
-                "6.1": "https://upload.wikimedia.org/wikipedia/commons/3/36/Hazmat_Class_6.svg",
-                "7": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Hazmat_Class_7.svg",
-                "8": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Hazmat_Class_8.svg",
-                "9": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Hazmat_Class_9.svg"
-            };
-            const cStr = String(item.class);
-            const pUrl = placardUrls[cStr] || placardUrls[cStr.charAt(0)] || '';
-            const imgHtml = pUrl ? `<img src="${pUrl}" style="width:70px; height:70px; filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.7));">` : '';
+            // 🌟 4. 【終極離線版】純 CSS 運輸標示產生器 (再也不會破圖)
+            function getCSSPlacard(c) {
+                let bg = '#fff', icon = '', num = c.charAt(0), color = '#000', iconTopColor = '#000';
+                if (c.startsWith('2.1')) { bg = '#F44336'; icon = '🔥'; color = '#fff'; iconTopColor = '#fff'; }
+                else if (c.startsWith('2.2')) { bg = '#4CAF50'; icon = '💨'; color = '#fff'; iconTopColor = '#fff'; }
+                else if (c.startsWith('2.3')) { bg = '#fff'; icon = '☠️'; color = '#000'; iconTopColor = '#000'; }
+                else if (c.startsWith('3')) { bg = '#F44336'; icon = '🔥'; color = '#fff'; iconTopColor = '#fff'; }
+                else if (c.startsWith('4.1')) { bg = 'repeating-linear-gradient(-45deg, #F44336, #F44336 6px, #fff 6px, #fff 12px)'; icon = '🔥'; color = '#000'; iconTopColor = '#000'; num = '4'; }
+                else if (c.startsWith('4.2')) { bg = 'linear-gradient(135deg, #fff 50%, #F44336 50%)'; icon = '🔥'; color = '#fff'; iconTopColor = '#000'; num = '4'; }
+                else if (c.startsWith('4.3')) { bg = '#2196F3'; icon = '🔥'; color = '#fff'; iconTopColor = '#fff'; num = '4'; }
+                else if (c.startsWith('5')) { bg = '#FFEB3B'; icon = '⭕'; color = '#000'; iconTopColor = '#000'; }
+                else if (c.startsWith('6')) { bg = '#fff'; icon = '☠️'; color = '#000'; iconTopColor = '#000'; }
+                else if (c.startsWith('7')) { bg = 'linear-gradient(135deg, #FFEB3B 50%, #fff 50%)'; icon = '☢️'; color = '#000'; iconTopColor = '#000'; }
+                else if (c.startsWith('8')) { bg = 'linear-gradient(135deg, #fff 50%, #000 50%)'; icon = '🧪'; color = '#fff'; iconTopColor = '#000'; }
+                else if (c.startsWith('9')) { bg = 'linear-gradient(135deg, transparent 50%, #fff 50%), repeating-linear-gradient(-45deg, #000, #000 6px, #fff 6px, #fff 12px)'; icon = '⚠️'; color = '#000'; iconTopColor = '#fff'; }
+                
+                return `
+                <div style="position:relative; width:52px; height:52px; transform:rotate(45deg); background:${bg}; border:2px solid #fff; box-shadow:0 0 0 1px #555, 3px 3px 6px rgba(0,0,0,0.5); border-radius:3px; flex-shrink:0;">
+                    <div style="position:absolute; top:-7px; left:-7px; width:100%; height:100%; display:flex; justify-content:center; align-items:flex-start; transform:rotate(-45deg); font-size:1.3rem; color:${iconTopColor};">${icon}</div>
+                    <div style="position:absolute; bottom:-7px; right:-7px; width:100%; height:100%; display:flex; justify-content:center; align-items:flex-end; transform:rotate(-45deg); font-size:1.1rem; font-weight:900; color:${color};">${num}</div>
+                </div>
+                `;
+            }
 
-            // 🌟 4. 建立「左右並排」的獨立視覺儀表板
+            // 🌟 5. 建立左右並排的視覺儀表板
             const classSpan = document.getElementById('d-class');
             if (classSpan && classSpan.parentElement) {
                 let visBox = document.getElementById('hcfd-visual-dashboard');
                 if (!visBox) {
                     visBox = document.createElement('div');
                     visBox.id = 'hcfd-visual-dashboard';
-                    // 將這個新區塊安全地插在「CAS | 類別」這一行的正下方
                     classSpan.parentElement.insertAdjacentElement('afterend', visBox);
                 }
                 
-                // 寫入左右並排的 HTML 架構
                 visBox.innerHTML = `
                     <div style="display:flex; flex-wrap:wrap; justify-content:space-around; align-items:center; background:#1e1e1e; padding:15px; margin:15px 0; border-radius:8px; border:1px solid #444; box-shadow:0 4px 8px rgba(0,0,0,0.5);">
                         
-                        <!-- 左半部：真實運輸圖示 -->
-                        <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
-                            ${imgHtml}
+                        <!-- 左半部：不會破圖的離線 CSS 標示 -->
+                        <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
+                            ${getCSSPlacard(item.class)}
                             <span style="font-size:1rem; font-weight:bold; color:#ff9800; background:#111; padding:3px 8px; border-radius:4px; box-shadow:inset 0 0 3px rgba(255,152,0,0.3);">Class ${item.class}</span>
                         </div>
 
                         <!-- 右半部：完美 45度角 NFPA 704 -->
                         <div style="display:flex; align-items:center; gap:20px;">
                             <div style="position:relative; width:60px; height:60px; transform:rotate(45deg); box-shadow: 2px 2px 6px rgba(0,0,0,0.6); flex-shrink:0;">
-                                <!-- 上：紅色火災 -->
-                                <div style="position:absolute; top:0; left:0; width:30px; height:30px; background:#F44336; color:white; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.1rem; border:1px solid #111;">
-                                    <span style="transform:rotate(-45deg);">${item.nfpa.f}</span>
-                                </div>
-                                <!-- 左：藍色健康 -->
-                                <div style="position:absolute; top:30px; left:0; width:30px; height:30px; background:#2196F3; color:white; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.1rem; border:1px solid #111;">
-                                    <span style="transform:rotate(-45deg);">${item.nfpa.h}</span>
-                                </div>
-                                <!-- 右：黃色反應 -->
-                                <div style="position:absolute; top:0; left:30px; width:30px; height:30px; background:#FFEB3B; color:black; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.1rem; border:1px solid #111;">
-                                    <span style="transform:rotate(-45deg);">${item.nfpa.r}</span>
-                                </div>
-                                <!-- 下：白色特殊 -->
-                                <div style="position:absolute; top:30px; left:30px; width:30px; height:30px; background:#FFFFFF; color:black; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:0.85rem; border:1px solid #111;">
-                                    <span style="transform:rotate(-45deg);">${item.nfpa.s || ''}</span>
-                                </div>
+                                <div style="position:absolute; top:0; left:0; width:30px; height:30px; background:#F44336; color:white; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.1rem; border:1px solid #111;"><span style="transform:rotate(-45deg);">${item.nfpa.f}</span></div>
+                                <div style="position:absolute; top:30px; left:0; width:30px; height:30px; background:#2196F3; color:white; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.1rem; border:1px solid #111;"><span style="transform:rotate(-45deg);">${item.nfpa.h}</span></div>
+                                <div style="position:absolute; top:0; left:30px; width:30px; height:30px; background:#FFEB3B; color:black; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.1rem; border:1px solid #111;"><span style="transform:rotate(-45deg);">${item.nfpa.r}</span></div>
+                                <div style="position:absolute; top:30px; left:30px; width:30px; height:30px; background:#FFFFFF; color:black; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:0.85rem; border:1px solid #111;"><span style="transform:rotate(-45deg);">${item.nfpa.s || ''}</span></div>
                             </div>
                             
-                            <!-- 文字說明 -->
+                            <!-- 僅保留此處的文字說明 -->
                             <div style="display:flex; flex-direction:column; gap:6px; font-size:0.95rem; font-weight:bold; color:#ccc;">
                                 <div><span style="color:#F44336;">紅:易燃</span> | <span style="color:#2196F3;">藍:健康</span></div>
                                 <div><span style="color:#FFEB3B;">黃:反應</span> | <span style="color:#fff;">白:特殊</span></div>
@@ -485,19 +483,14 @@ function showDetail(item) {
                 `;
             }
 
-            // 🌟 5. GHS 危害標示 (附帶放射性自動校正機制)
-            const ghsMap = {
-                "🔥": "易燃物", "⭕": "氧化性", "💣": "爆炸物", "💥": "爆炸物", 
-                "💨": "加壓氣體", "🧪": "腐蝕性", "☢️": "放射性", "☠️": "急毒性", 
-                "⚠️": "警告/刺激", "👤": "健康危害", "🐟": "環境危害"
-            };
-
+            // 6. GHS 危害標示 (附帶 ☢️ 校正防呆)
+            const ghsMap = { "🔥": "易燃物", "⭕": "氧化性", "💣": "爆炸物", "💥": "爆炸物", "💨": "加壓氣體", "🧪": "腐蝕性", "☢️": "放射性", "☠️": "急毒性", "⚠️": "警告/刺激", "👤": "健康危害", "🐟": "環境危害" };
             const ghsBox = document.getElementById('d-ghs');
             if (ghsBox) {
                 ghsBox.innerHTML = '';
                 item.ghs[0].split(',').forEach(g => {
                     let icon = g.trim();
-                    if (icon === "☢️" && item.class !== "7") icon = "🧪"; // 校正防呆
+                    if (icon === "☢️" && item.class !== "7") icon = "🧪";
                     if(icon) {
                         const text = ghsMap[icon] || "";
                         ghsBox.innerHTML += `<span class="ghs-badge">${icon} ${text}</span>`;
@@ -505,13 +498,13 @@ function showDetail(item) {
                 });
             }
 
-            // 🌟 6. 其他戰術資訊與 ERG 動態點擊
+            // 7. ERG 彈窗與其他戰術
             const dGuide = document.getElementById('d-guide');
             if (dGuide) dGuide.innerHTML = `<span class="guide-link" onclick="showErgGuide('${item.erg}')">${item.erg} 👆</span>`;
-            
             if(document.getElementById('d-iso')) document.getElementById('d-iso').innerText = item.isolation;
             if(document.getElementById('d-tactics')) document.getElementById('d-tactics').innerText = item.tactics;
             if(document.getElementById('d-ppe')) document.getElementById('d-ppe').innerText = item.ppe;
+            
             window.scrollTo(0,0);
         }
         
