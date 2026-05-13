@@ -385,14 +385,7 @@
             event.target.classList.add('active');
             document.getElementById(tabId).classList.add('active');
         }
-        // 點擊分類卡片後，將分類代號輸入搜尋框並執行搜尋
-        function setQueryByClass(classNum) {
-            inputEl.value = `Class ${classNum}`;
-            handleSearch();
-            // 讓手機自動收起鍵盤 (選用)
-            inputEl.blur(); 
-        }
-
+        
         function handleSearch() {
             const query = inputEl.value.trim().toLowerCase();
             resultsEl.innerHTML = '';
@@ -428,7 +421,7 @@
             }
         }
 
-function showDetail(item) {
+        function showDetail(item) {
             // 切換畫面
             detailEl.style.display = 'block';
             document.getElementById('main-card').style.display = 'none';
