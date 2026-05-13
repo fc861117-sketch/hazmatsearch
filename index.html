@@ -44,11 +44,12 @@
         .class-card img {
             width: 55px;
             height: 55px;
-            /* 帶有微亮細白邊，防止黑色圖示融入背景 */
-            filter: drop-shadow(0px 0px 1px rgba(255,255,255,0.8)) drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
-            border: 1px solid rgba(255,255,255,0.1); 
-            padding: 2px;
-            background: rgba(255,255,255,0.02);
+            /* 🌟 終極解法：強制加上白底，並用 clip-path 裁切成完美的菱形 */
+            background-color: #FFFFFF;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            /* 加上陰影讓圖示更有立體感 */
+            filter: drop-shadow(2px 3px 5px rgba(0,0,0,0.6));
+            margin-bottom: 5px;
         }
         .class-card-text {
             font-size: 0.85rem;
