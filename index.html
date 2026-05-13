@@ -26,6 +26,36 @@
             background-repeat: repeat;
         }
 
+        /* 運輸分類卡片樣式 */
+        .class-card {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 10px 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .class-card:active {
+            transform: scale(0.95);
+            background: #333;
+        }
+        .class-card img {
+            width: 50px;
+            height: 50px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+        }
+        .class-card-text {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #ccc;
+            line-height: 1.2;
+        }
          /* 網頁專屬背景浮水印 (滿版排列小字體) */
         .page-watermark { 
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -354,6 +384,13 @@
             document.querySelectorAll('.ref-content').forEach(content => content.classList.remove('active'));
             event.target.classList.add('active');
             document.getElementById(tabId).classList.add('active');
+        }
+        // 點擊分類卡片後，將分類代號輸入搜尋框並執行搜尋
+        function setQueryByClass(classNum) {
+            inputEl.value = `Class ${classNum}`;
+            handleSearch();
+            // 讓手機自動收起鍵盤 (選用)
+            inputEl.blur(); 
         }
 
         function handleSearch() {
