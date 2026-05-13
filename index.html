@@ -407,16 +407,23 @@
             document.getElementById('nfpa-r').innerText = item.nfpa.r;
             document.getElementById('nfpa-s').innerText = item.nfpa.s || "-";
 
+           // 🌟 1. 修正字典：將 ☢️ 正確對應為「放射性」，🧪 才是「腐蝕性」
             const ghsMap = {
                 "🔥": "易燃物", "⭕": "氧化性", "💣": "爆炸物", "💥": "爆炸物", 
-                "💨": "加壓氣體", "☢️": "放射性", "🧪": "腐蝕性", "☠️": "急毒性", 
+                "💨": "加壓氣體", "🧪": "腐蝕性", "☢️": "放射性", "☠️": "急毒性", 
                 "⚠️": "警告/刺激", "👤": "健康危害", "🐟": "環境危害"
             };
 
             const ghsBox = document.getElementById('d-ghs');
             ghsBox.innerHTML = '';
             item.ghs[0].split(',').forEach(g => {
-                const icon = g.trim();
+                let icon = g.trim();
+                
+                // 🌟 2. 自動校正防呆：如果抓到 ☢️ 符號，但這項物質不是第 7 類 (放射性物質)，就一律自動轉回 🧪 試管！
+                if (icon === "☢️" && item.class !== "7") {
+                    icon = "🧪";
+                }
+
                 if(icon) {
                     const text = ghsMap[icon] || "";
                     ghsBox.innerHTML += `<span class="ghs-badge">${icon} ${text}</span>`;
