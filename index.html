@@ -324,11 +324,12 @@
             
             refSection.style.display = 'none';
             
+            // 🌟 修正點：將中文欄位與 CAS 號碼在比對時也強制轉為小寫
             const matches = db.filter(item => 
                 item.un.includes(query) || 
-                item.nameTW.includes(query) || 
+                item.nameTW.toLowerCase().includes(query) || 
                 item.nameEN.toLowerCase().includes(query) || 
-                (item.cas && item.cas.includes(query))
+                (item.cas && item.cas.toLowerCase().includes(query))
             );
 
             if (matches.length > 0) {
