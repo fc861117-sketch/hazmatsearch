@@ -445,12 +445,35 @@ function handleSearch() {
             });
 
             // 4. 顯示結果
+// 4. 顯示結果
             if (matches.length > 0) {
                 resultsEl.style.display = 'block';
                 matches.forEach(item => {
                     const div = document.createElement('div');
-                    div.style = "padding:12px; background:#333; border-bottom:1px solid #444; cursor:pointer; font-size:1.1rem;";
-                    div.innerHTML = `<span style="background:#ff9800;color:black;padding:2px 6px;border-radius:4px;font-weight:bold;margin-right:10px;">UN ${item.un}</span> ${item.nameTW}`;
+                    
+                    // 🌟 自動偵測是否為禁水性物質
+                    const isWaterReactive = (item.nfpa.s || '').toUpperCase().includes('W');
+                    
+                    // 🌟 動態改變背景與邊框顏色
+                    let rowStyle = "padding:12px; border-bottom:1px solid #444; cursor:pointer; font-size:1.1rem; display:flex; align-items:center;";
+                    if (isWaterReactive) {
+                        // 禁水警示：暗紅色底 + 左側鮮紅粗邊框
+                        rowStyle += " background: rgba(244, 67, 54, 0.15); border-left: 4px solid #f44336;"; 
+                    } else {
+                        // 正常物質：維持原本的深灰底
+                        rowStyle += " background: #333; border-left: 4px solid transparent;"; 
+                    }
+                    div.style = rowStyle;
+
+                    // 🌟 動態組合標籤
+                    let badgeHtml = `<span style="background:#ff9800;color:black;padding:2px 6px;border-radius:4px;font-weight:bold;margin-right:10px;white-space:nowrap;flex-shrink:0;">UN ${item.un}</span>`;
+                    
+                    // 如果是禁水，額外插入一個紅色警告標籤
+                    if (isWaterReactive) {
+                        badgeHtml += `<span style="background:#f44336;color:white;padding:2px 6px;border-radius:4px;font-weight:bold;font-size:0.85rem;margin-right:10px;white-space:nowrap;flex-shrink:0;box-shadow:0 0 5px rgba(244,67,54,0.6);">🈲禁水</span>`;
+                    }
+
+                    div.innerHTML = `${badgeHtml} <span style="line-height:1.3;">${item.nameTW}</span>`;
                     div.onclick = () => showDetail(item);
                     resultsEl.appendChild(div);
                 });
