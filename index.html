@@ -27,28 +27,28 @@
         }
 
         /* 運輸分類卡片樣式 */
+/* 運輸分類卡片樣式 (純靜態展示版) */
         .class-card {
             background: #2a2a2a;
             border: 1px solid #444;
             border-radius: 8px;
             padding: 10px 5px;
             text-align: center;
-            cursor: pointer;
-            transition: transform 0.1s, background 0.2s;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 8px;
-        }
-        .class-card:active {
-            transform: scale(0.95);
-            background: #333;
+            /* 已經移除 cursor 與 hover 特效，讓它變成純圖卡 */
         }
         .class-card img {
-            width: 50px;
-            height: 50px;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+            width: 55px;
+            height: 55px;
+            /* 帶有微亮細白邊，防止黑色圖示融入背景 */
+            filter: drop-shadow(0px 0px 1px rgba(255,255,255,0.8)) drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+            border: 1px solid rgba(255,255,255,0.1); 
+            padding: 2px;
+            background: rgba(255,255,255,0.02);
         }
         .class-card-text {
             font-size: 0.85rem;
@@ -241,39 +241,39 @@
 
             <!-- Tab 1: 完美呈現的 UN 分類菱形牌 -->
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px;">
-    <div class="class-card" onclick="setQueryByClass('1')">
+    <div class="class-card">
         <img src="img/class_1.svg" alt="Class 1">
         <div class="class-card-text">第 1 類<br>爆炸物</div>
     </div>
-    <div class="class-card" onclick="setQueryByClass('2')">
+    <div class="class-card">
         <img src="img/class_2.svg" alt="Class 2">
         <div class="class-card-text">第 2 類<br>氣體</div>
     </div>
-    <div class="class-card" onclick="setQueryByClass('3')">
+    <div class="class-card">
         <img src="img/class_3.svg" alt="Class 3">
         <div class="class-card-text">第 3 類<br>易燃液體</div>
     </div>
-    <div class="class-card" onclick="setQueryByClass('4')">
+    <div class="class-card">
         <img src="img/class_4.svg" alt="Class 4">
         <div class="class-card-text">第 4 類<br>易燃固體</div>
     </div>
-    <div class="class-card" onclick="setQueryByClass('5')">
+    <div class="class-card">
         <img src="img/class_5.svg" alt="Class 5">
         <div class="class-card-text">第 5 類<br>氧化物質</div>
     </div>
-    <div class="class-card" onclick="setQueryByClass('6')">
+    <div class="class-card">
         <img src="img/class_6.svg" alt="Class 6">
         <div class="class-card-text">第 6 類<br>毒性/感染</div>
     </div>
-    <div class="class-card" onclick="setQueryByClass('7')">
+    <div class="class-card">
         <img src="img/class_7.svg" alt="Class 7">
         <div class="class-card-text">第 7 類<br>放射性</div>
     </div>
-    <div class="class-card" onclick="setQueryByClass('8')">
+    <div class="class-card">
         <img src="img/class_8.svg" alt="Class 8">
         <div class="class-card-text">第 8 類<br>腐蝕性</div>
     </div>
-    <div class="class-card" onclick="setQueryByClass('9')">
+    <div class="class-card">
         <img src="img/class_9.svg" alt="Class 9">
         <div class="class-card-text">第 9 類<br>其他危害</div>
     </div>
