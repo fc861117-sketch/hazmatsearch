@@ -411,17 +411,7 @@
                 if(el && el.parentElement) el.parentElement.style.display = 'none';
             });
 
-            // 🌟 3. 自動大掃除：尋找並隱藏 HTML 中寫死的多餘舊註解
-            document.querySelectorAll('div, p, span').forEach(el => {
-                // 只要不是我們新生成的儀表板，且包含舊註解關鍵字，就將其隱藏
-                if (el.id !== 'hcfd-visual-dashboard' && !el.closest('#hcfd-visual-dashboard')) {
-                    if (el.innerText && el.innerText.includes('紅:易燃') && el.innerText.includes('白:特殊')) {
-                        el.style.display = 'none';
-                    }
-                }
-            });
-
-            // 🌟 4. 【終極離線版】純 CSS 運輸標示產生器 (再也不會破圖)
+            // 🌟 3. 【終極離線版】純 CSS 運輸標示產生器 (無網路也能顯示，不破圖)
             function getCSSPlacard(c) {
                 let bg = '#fff', icon = '', num = c.charAt(0), color = '#000', iconTopColor = '#000';
                 if (c.startsWith('2.1')) { bg = '#F44336'; icon = '🔥'; color = '#fff'; iconTopColor = '#fff'; }
@@ -445,7 +435,7 @@
                 `;
             }
 
-            // 🌟 5. 建立左右並排的視覺儀表板
+            // 🌟 4. 建立左右並排的視覺儀表板
             const classSpan = document.getElementById('d-class');
             if (classSpan && classSpan.parentElement) {
                 let visBox = document.getElementById('hcfd-visual-dashboard');
@@ -457,14 +447,10 @@
                 
                 visBox.innerHTML = `
                     <div style="display:flex; flex-wrap:wrap; justify-content:space-around; align-items:center; background:#1e1e1e; padding:15px; margin:15px 0; border-radius:8px; border:1px solid #444; box-shadow:0 4px 8px rgba(0,0,0,0.5);">
-                        
-                        <!-- 左半部：不會破圖的離線 CSS 標示 -->
                         <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
                             ${getCSSPlacard(item.class)}
                             <span style="font-size:1rem; font-weight:bold; color:#ff9800; background:#111; padding:3px 8px; border-radius:4px; box-shadow:inset 0 0 3px rgba(255,152,0,0.3);">Class ${item.class}</span>
                         </div>
-
-                        <!-- 右半部：完美 45度角 NFPA 704 -->
                         <div style="display:flex; align-items:center; gap:20px;">
                             <div style="position:relative; width:60px; height:60px; transform:rotate(45deg); box-shadow: 2px 2px 6px rgba(0,0,0,0.6); flex-shrink:0;">
                                 <div style="position:absolute; top:0; left:0; width:30px; height:30px; background:#F44336; color:white; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.1rem; border:1px solid #111;"><span style="transform:rotate(-45deg);">${item.nfpa.f}</span></div>
@@ -472,18 +458,12 @@
                                 <div style="position:absolute; top:0; left:30px; width:30px; height:30px; background:#FFEB3B; color:black; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.1rem; border:1px solid #111;"><span style="transform:rotate(-45deg);">${item.nfpa.r}</span></div>
                                 <div style="position:absolute; top:30px; left:30px; width:30px; height:30px; background:#FFFFFF; color:black; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:0.85rem; border:1px solid #111;"><span style="transform:rotate(-45deg);">${item.nfpa.s || ''}</span></div>
                             </div>
-                            
-                            <!-- 僅保留此處的文字說明 -->
-                            <div style="display:flex; flex-direction:column; gap:6px; font-size:0.95rem; font-weight:bold; color:#ccc;">
-                                <div><span style="color:#F44336;">紅:易燃</span> | <span style="color:#2196F3;">藍:健康</span></div>
-                                <div><span style="color:#FFEB3B;">黃:反應</span> | <span style="color:#fff;">白:特殊</span></div>
-                            </div>
                         </div>
                     </div>
                 `;
             }
 
-            // 6. GHS 危害標示 (附帶 ☢️ 校正防呆)
+            // 5. GHS 危害標示
             const ghsMap = { "🔥": "易燃物", "⭕": "氧化性", "💣": "爆炸物", "💥": "爆炸物", "💨": "加壓氣體", "🧪": "腐蝕性", "☢️": "放射性", "☠️": "急毒性", "⚠️": "警告/刺激", "👤": "健康危害", "🐟": "環境危害" };
             const ghsBox = document.getElementById('d-ghs');
             if (ghsBox) {
@@ -498,7 +478,7 @@
                 });
             }
 
-            // 7. ERG 彈窗與其他戰術
+            // 6. ERG 彈窗與其他資訊
             const dGuide = document.getElementById('d-guide');
             if (dGuide) dGuide.innerHTML = `<span class="guide-link" onclick="showErgGuide('${item.erg}')">${item.erg} 👆</span>`;
             if(document.getElementById('d-iso')) document.getElementById('d-iso').innerText = item.isolation;
