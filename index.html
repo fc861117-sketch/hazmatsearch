@@ -5,6 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HCFD // 危害辨識系統 (ISO)</title>
     <style>
+        /* 全螢幕重複浮水印 */
+        body {
+            position: relative;
+        }
+        
+        body::before {
+            content: "powered by 單柏洋"; /* 內容多一點可以填滿橫向 */
+            position: fixed;
+            top: 0; left: 0; width: 200%; height: 200%; /* 擴大範圍以利旋轉 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-size: 2rem;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.03); /* 透明度，建議設在 0.02~0.04 之間 */
+            transform: rotate(-25deg);
+            transform-origin: center;
+            z-index: -1;
+            pointer-events: none;
+            line-height: 10rem; /* 控制上下行距 */
+            letter-spacing: 2rem; /* 控制左右字距 */
+        }
         :root {
             --bg-color: #121212;
             --card-bg: #1e1e1e;
