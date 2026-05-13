@@ -396,75 +396,16 @@
         }
 
 function showDetail(item) {
-            // 切換畫面：顯示詳細資訊，隱藏搜尋主畫面
+            // 切換畫面
             detailEl.style.display = 'block';
             document.getElementById('main-card').style.display = 'none';
             
-            // 1. 寫入標題與 CAS 號碼
+            // 🌟 1. 恢復原本的文字資訊，確保「CAS | 類別」同一行不會跑版
             document.getElementById('d-name').innerText = `[UN ${item.un}] ${item.nameTW}`;
             document.getElementById('d-cas').innerText = item.cas || "N/A";
+            document.getElementById('d-class').innerText = `Class ${item.class}`;
             
-            // 🌟 2. 取得真實運輸圖示 (全面採用相容性最強的 PNG 格式)
-            const placardUrls = {
-                "2.1": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Hazmat_Class_2-1.svg/120px-Hazmat_Class_2-1.svg.png",
-                "2.2": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Hazmat_Class_2-2.svg/120px-Hazmat_Class_2-2.svg.png",
-                "2.3": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Hazmat_Class_2-3.svg/120px-Hazmat_Class_2-3.svg.png",
-                "3": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Hazmat_Class_3.svg/120px-Hazmat_Class_3.svg.png",
-                "4.1": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Hazmat_Class_4-1.svg/120px-Hazmat_Class_4-1.svg.png",
-                "4.2": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Hazmat_Class_4-2.svg/120px-Hazmat_Class_4-2.svg.png",
-                "4.3": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Hazmat_Class_4-3.svg/120px-Hazmat_Class_4-3.svg.png",
-                "5.1": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Hazmat_Class_5-1.svg/120px-Hazmat_Class_5-1.svg.png",
-                "5.2": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Hazmat_Class_5-2.svg/120px-Hazmat_Class_5-2.svg.png",
-                "6.1": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Hazmat_Class_6.svg/120px-Hazmat_Class_6.svg.png",
-                "7": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Hazmat_Class_7.svg/120px-Hazmat_Class_7.svg.png",
-                "8": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Hazmat_Class_8.svg/120px-Hazmat_Class_8.svg.png",
-                "9": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Hazmat_Class_9.svg/120px-Hazmat_Class_9.svg.png"
-            };
-            const cStr = String(item.class);
-            const pUrl = placardUrls[cStr] || placardUrls[cStr.charAt(0)] || '';
-            const imgHtml = pUrl ? `<img src="${pUrl}" style="width:65px; height:65px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.6)); margin-right: 15px;">` : '';
-
-            // 🌟 3. 將真實圖示與 NFPA 一次性塞入畫面 (直接替換原本的 Class 區塊)
-            const classBox = document.getElementById('d-class');
-            if (classBox) {
-                classBox.innerHTML = `
-                    <!-- 運輸圖示區塊 -->
-                    <div style="display:flex; align-items:center; margin-top:10px; padding-bottom:15px; border-bottom:1px solid #333;">
-                        ${imgHtml}
-                        <span style="font-size:1.2rem; font-weight:bold; color:#ff9800; background:#333; padding:4px 10px; border-radius:4px;">類別: Class ${item.class}</span>
-                    </div>
-
-                    <!-- 完美版 NFPA 704 菱形儀表板 -->
-                    <div style="display:flex; align-items:center; gap:35px; margin-top:20px;">
-                        <div style="position:relative; width:64px; height:64px; transform:rotate(45deg); box-shadow: 2px 2px 6px rgba(0,0,0,0.5); flex-shrink:0;">
-                            <!-- 上：紅色易燃 (top:0, left:0) -->
-                            <div style="position:absolute; top:0; left:0; width:32px; height:32px; background:#F44336; color:white; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.2rem; border:1px solid #111;">
-                                <span style="transform:rotate(-45deg);">${item.nfpa.f}</span>
-                            </div>
-                            <!-- 左：藍色健康 (top:32, left:0) -->
-                            <div style="position:absolute; top:32px; left:0; width:32px; height:32px; background:#2196F3; color:white; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.2rem; border:1px solid #111;">
-                                <span style="transform:rotate(-45deg);">${item.nfpa.h}</span>
-                            </div>
-                            <!-- 右：黃色反應 (top:0, left:32) -->
-                            <div style="position:absolute; top:0; left:32px; width:32px; height:32px; background:#FFEB3B; color:black; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.2rem; border:1px solid #111;">
-                                <span style="transform:rotate(-45deg);">${item.nfpa.r}</span>
-                            </div>
-                            <!-- 下：白色特殊 (top:32, left:32) -->
-                            <div style="position:absolute; top:32px; left:32px; width:32px; height:32px; background:#FFFFFF; color:black; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:0.9rem; border:1px solid #111;">
-                                <span style="transform:rotate(-45deg);">${item.nfpa.s || '-'}</span>
-                            </div>
-                        </div>
-                        
-                        <!-- 對應色彩說明文字 -->
-                        <div style="display:flex; flex-direction:column; gap:5px; font-size:0.95rem; font-weight:bold; color:#ccc;">
-                            <div><span style="color:#F44336;">紅:易燃</span> | <span style="color:#2196F3;">藍:健康</span></div>
-                            <div><span style="color:#FFEB3B;">黃:反應</span> | <span style="color:#fff;">白:特殊</span></div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            // 🌟 4. 隱藏舊的獨立 NFPA 數字欄位 (確保不會跟上方的新介面重複出現)
+            // 🌟 2. 隱藏舊的十字形 NFPA 數字欄位
             ['nfpa-f', 'nfpa-h', 'nfpa-r', 'nfpa-s'].forEach(id => {
                 const el = document.getElementById(id);
                 if(el && el.parentElement) {
@@ -472,7 +413,79 @@ function showDetail(item) {
                 }
             });
 
-            // 🌟 5. GHS 危害標示 (搭載 ☢️ 自動校正機制)
+            // 🌟 3. 取得「絕對不會破圖」的 SVG 原始運輸圖示
+            const placardUrls = {
+                "2.1": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Hazmat_Class_2-1.svg",
+                "2.2": "https://upload.wikimedia.org/wikipedia/commons/5/58/Hazmat_Class_2-2.svg",
+                "2.3": "https://upload.wikimedia.org/wikipedia/commons/8/87/Hazmat_Class_2-3.svg",
+                "3": "https://upload.wikimedia.org/wikipedia/commons/2/23/Hazmat_Class_3.svg",
+                "4.1": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Hazmat_Class_4-1.svg",
+                "4.2": "https://upload.wikimedia.org/wikipedia/commons/0/01/Hazmat_Class_4-2.svg",
+                "4.3": "https://upload.wikimedia.org/wikipedia/commons/5/52/Hazmat_Class_4-3.svg",
+                "5.1": "https://upload.wikimedia.org/wikipedia/commons/0/01/Hazmat_Class_5-1.svg",
+                "5.2": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Hazmat_Class_5-2.svg",
+                "6.1": "https://upload.wikimedia.org/wikipedia/commons/3/36/Hazmat_Class_6.svg",
+                "7": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Hazmat_Class_7.svg",
+                "8": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Hazmat_Class_8.svg",
+                "9": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Hazmat_Class_9.svg"
+            };
+            const cStr = String(item.class);
+            const pUrl = placardUrls[cStr] || placardUrls[cStr.charAt(0)] || '';
+            const imgHtml = pUrl ? `<img src="${pUrl}" style="width:70px; height:70px; filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.7));">` : '';
+
+            // 🌟 4. 建立「左右並排」的獨立視覺儀表板
+            const classSpan = document.getElementById('d-class');
+            if (classSpan && classSpan.parentElement) {
+                let visBox = document.getElementById('hcfd-visual-dashboard');
+                if (!visBox) {
+                    visBox = document.createElement('div');
+                    visBox.id = 'hcfd-visual-dashboard';
+                    // 將這個新區塊安全地插在「CAS | 類別」這一行的正下方
+                    classSpan.parentElement.insertAdjacentElement('afterend', visBox);
+                }
+                
+                // 寫入左右並排的 HTML 架構
+                visBox.innerHTML = `
+                    <div style="display:flex; flex-wrap:wrap; justify-content:space-around; align-items:center; background:#1e1e1e; padding:15px; margin:15px 0; border-radius:8px; border:1px solid #444; box-shadow:0 4px 8px rgba(0,0,0,0.5);">
+                        
+                        <!-- 左半部：真實運輸圖示 -->
+                        <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+                            ${imgHtml}
+                            <span style="font-size:1rem; font-weight:bold; color:#ff9800; background:#111; padding:3px 8px; border-radius:4px; box-shadow:inset 0 0 3px rgba(255,152,0,0.3);">Class ${item.class}</span>
+                        </div>
+
+                        <!-- 右半部：完美 45度角 NFPA 704 -->
+                        <div style="display:flex; align-items:center; gap:20px;">
+                            <div style="position:relative; width:60px; height:60px; transform:rotate(45deg); box-shadow: 2px 2px 6px rgba(0,0,0,0.6); flex-shrink:0;">
+                                <!-- 上：紅色火災 -->
+                                <div style="position:absolute; top:0; left:0; width:30px; height:30px; background:#F44336; color:white; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.1rem; border:1px solid #111;">
+                                    <span style="transform:rotate(-45deg);">${item.nfpa.f}</span>
+                                </div>
+                                <!-- 左：藍色健康 -->
+                                <div style="position:absolute; top:30px; left:0; width:30px; height:30px; background:#2196F3; color:white; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.1rem; border:1px solid #111;">
+                                    <span style="transform:rotate(-45deg);">${item.nfpa.h}</span>
+                                </div>
+                                <!-- 右：黃色反應 -->
+                                <div style="position:absolute; top:0; left:30px; width:30px; height:30px; background:#FFEB3B; color:black; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.1rem; border:1px solid #111;">
+                                    <span style="transform:rotate(-45deg);">${item.nfpa.r}</span>
+                                </div>
+                                <!-- 下：白色特殊 -->
+                                <div style="position:absolute; top:30px; left:30px; width:30px; height:30px; background:#FFFFFF; color:black; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:0.85rem; border:1px solid #111;">
+                                    <span style="transform:rotate(-45deg);">${item.nfpa.s || ''}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 文字說明 -->
+                            <div style="display:flex; flex-direction:column; gap:6px; font-size:0.95rem; font-weight:bold; color:#ccc;">
+                                <div><span style="color:#F44336;">紅:易燃</span> | <span style="color:#2196F3;">藍:健康</span></div>
+                                <div><span style="color:#FFEB3B;">黃:反應</span> | <span style="color:#fff;">白:特殊</span></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 🌟 5. GHS 危害標示 (附帶放射性自動校正機制)
             const ghsMap = {
                 "🔥": "易燃物", "⭕": "氧化性", "💣": "爆炸物", "💥": "爆炸物", 
                 "💨": "加壓氣體", "🧪": "腐蝕性", "☢️": "放射性", "☠️": "急毒性", 
@@ -484,10 +497,7 @@ function showDetail(item) {
                 ghsBox.innerHTML = '';
                 item.ghs[0].split(',').forEach(g => {
                     let icon = g.trim();
-                    // 防呆：如果符號是 ☢️ 但該物質不是第 7 類，自動校正回 🧪 腐蝕性
-                    if (icon === "☢️" && item.class !== "7") {
-                        icon = "🧪";
-                    }
+                    if (icon === "☢️" && item.class !== "7") icon = "🧪"; // 校正防呆
                     if(icon) {
                         const text = ghsMap[icon] || "";
                         ghsBox.innerHTML += `<span class="ghs-badge">${icon} ${text}</span>`;
@@ -499,11 +509,9 @@ function showDetail(item) {
             const dGuide = document.getElementById('d-guide');
             if (dGuide) dGuide.innerHTML = `<span class="guide-link" onclick="showErgGuide('${item.erg}')">${item.erg} 👆</span>`;
             
-            if (document.getElementById('d-iso')) document.getElementById('d-iso').innerText = item.isolation;
-            if (document.getElementById('d-tactics')) document.getElementById('d-tactics').innerText = item.tactics;
-            if (document.getElementById('d-ppe')) document.getElementById('d-ppe').innerText = item.ppe;
-            
-            // 將畫面滾回最上方
+            if(document.getElementById('d-iso')) document.getElementById('d-iso').innerText = item.isolation;
+            if(document.getElementById('d-tactics')) document.getElementById('d-tactics').innerText = item.tactics;
+            if(document.getElementById('d-ppe')) document.getElementById('d-ppe').innerText = item.ppe;
             window.scrollTo(0,0);
         }
         
