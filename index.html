@@ -679,15 +679,20 @@ function showDetail(item) {
                 
                 // 1. PubChem
                 const pubChemUrl = `https://pubchem.ncbi.nlm.nih.gov/#query=${cleanCas}`;
-                sdsBox.innerHTML += `<a href="${pubChemUrl}" target="_blank" class="sds-link-btn">PubChem</a>`;
+                sdsBox.innerHTML += `<a href="${pubChemUrl}" target="_blank" class="sds-link-btn">PubChem(英文)</a>`;
                 
-                // 2. CAMEO Chemicals
-                const cameoUrl = `https://cameochemicals.noaa.gov/search/simple?search_type=cas&search_text=${cleanCas}`;
-                sdsBox.innerHTML += `<a href="${cameoUrl}" target="_blank" class="sds-link-btn" style="background:#2e7d32;">CAMEO</a>`;
-
-                // 3. ICSC
+                // 2. ICSC
                 const googleSds = `https://www.google.com/search?q=site:ilo.org+ICSC+${cleanCas}`;
-                sdsBox.innerHTML += `<a href="${googleSds}" target="_blank" class="sds-link-btn" style="background:#1565c0;">ICSC 檢索</a>`;
+                sdsBox.innerHTML += `<a href="${googleSds}" target="_blank" class="sds-link-btn" style="background:#1565c0;">ICSC 檢索(英文)</a>`;
+
+                // 👇 3. 台灣繁體中文 SDS (透過 Google 進階語法鎖定台灣 PDF)
+                const twSdsUrl = `https://www.google.com/search?q="%2B${cleanCas}%2B"+"安全資料表"+site:tw`;
+                sdsBox.innerHTML += `<a href="${twSdsUrl}" target="_blank" class="sds-link-btn" style="background:#d84315; border-color:#fbe9e7;">🇹🇼 台灣 SDS</a>`;
+
+                // 👇 4. Merck 默克台灣 (化學界黃金標準的繁中 SDS)
+                const merckUrl = `https://www.sigmaaldrich.com/TW/zh/search/${cleanCas}?focus=products`;
+                sdsBox.innerHTML += `<a href="${merckUrl}" target="_blank" class="sds-link-btn" style="background:#00838f;">Merck 台灣</a>`;
+                
             } else {
                 sdsBox.innerHTML = '<span style="color:#666; font-size:0.9rem;">此物質無 CAS 資訊，無法提供外部連結。</span>';
             }
