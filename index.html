@@ -685,17 +685,19 @@ function showDetail(item) {
                 const googleSds = `https://www.google.com/search?q=site:ilo.org+ICSC+${cleanCas}`;
                 sdsBox.innerHTML += `<a href="${googleSds}" target="_blank" class="sds-link-btn" style="background:#1565c0;">ICSC 檢索(英文)</a>`;
 
-                // 4. 台灣繁體中文 SDS (終極優化版：名稱為主，CAS為輔)
+                // 4. 台灣/中文 SDS (極簡實戰版：模仿人類手動輸入)
                 const chemName = item.nameTW || ''; 
                 const enName = item.name || '';
-                // 組合邏輯：強迫包含 "安全資料表" 以及 "中文名稱"。
-                // 同時容許網頁中出現 CAS "或" 英文名稱，這樣能大幅提高命中原廠 SDS 的機率
-                const twSdsKeyword = `"${chemName}" ("${cleanCas}" OR "${enName}") "安全資料表" site:tw`;
 
+                // 放棄雙引號與 site:tw，直接把中英文名稱加上 "SDS" 和 "安全資料表" 丟給 Google
+                // 這樣生成的結果就會完全等同於你手動輸入 "TEOS 四乙氧基矽烷 SDS 安全資料表"
+                const twSdsKeyword = `${enName} ${chemName} SDS 安全資料表`.trim();
+
+                // 轉換為安全的 URL 格式
                 const twQuery = encodeURIComponent(twSdsKeyword);
                 const twSdsUrl = `https://www.google.com/search?q=${twQuery}`;
 
-                sdsBox.innerHTML += `<a href="${twSdsUrl}" target="_blank" class="sds-link-btn" style="background:#d84315; border-color:#fbe9e7;">🇹🇼 台灣 SDS</a>`;
+                sdsBox.innerHTML += `<a href="${twSdsUrl}" target="_blank" class="sds-link-btn" style="background:#d84315; border-color:#fbe9e7;">🇹🇼 中文 SDS</a>`;
 
                 // 4. Merck 默克台灣 (加入 term 參數強制觸發搜尋)
                 // 加上 &term= 可以跳過手動輸入，直接讓網站執行搜尋
