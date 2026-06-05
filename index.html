@@ -1106,10 +1106,8 @@ function handleSearch() {
             matches.sort((a, b) => getRelevance(b) - getRelevance(a));
             // 限制前15筆以保持流暢度
             matches = matches.slice(0, 15);
-        });
 
             // 4. 顯示結果
-// 4. 顯示結果
             if (matches.length > 0) {
                 resultsEl.style.display = 'block';
                 matches.forEach(item => {
