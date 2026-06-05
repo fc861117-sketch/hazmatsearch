@@ -638,7 +638,8 @@
         </div>
  
         <div class="data-row"><div class="data-label">PPE 裝備要求</div><div class="data-value" id="d-ppe"></div></div>
-    </div> <!-- 閉合 search-tab -->
+    </div> <!-- 閉合 detail-view -->
+</div> <!-- 閉合 search-tab -->
 
     <!-- Tab 2: 混合相容性評估 -->
     <div id="compat-tab" class="main-tab-content" style="display:none;">
@@ -814,13 +815,51 @@
                 return;
             }
             
-            const matches = db.filter(item => {
+            let matches = db.filter(item => {
                 const unMatch = item.un && item.un.includes(query);
                 const casMatch = item.cas && item.cas.toLowerCase().includes(query);
                 const twMatch = item.nameTW && item.nameTW.toLowerCase().includes(query);
                 const enMatch = item.nameEN && item.nameEN.toLowerCase().includes(query);
                 return unMatch || casMatch || twMatch || enMatch;
-            }).slice(0, 10);
+            });
+            
+            // 智慧相關性分數排序 (將最符合的排在最上面)
+            const getRelevance = (item) => {
+                let score = 0;
+                const nameTW = (item.nameTW || '').toLowerCase();
+                const nameEN = (item.nameEN || '').toLowerCase();
+                const un = (item.un || '');
+                const cas = (item.cas || '').toLowerCase();
+                
+                // UN 號碼匹配
+                if (un === query) score += 10000;
+                else if (un.startsWith(query)) score += 8000;
+                else if (un.includes(query)) score += 6000;
+                
+                // 中文名稱匹配
+                if (nameTW === query) score += 5000;
+                else if (nameTW.startsWith(query)) score += 4000;
+                else if (nameTW.includes(query)) {
+                    score += (2000 - nameTW.indexOf(query));
+                }
+                
+                // 英文名稱匹配
+                if (nameEN === query) score += 3000;
+                else if (nameEN.startsWith(query)) score += 2000;
+                else if (nameEN.includes(query)) {
+                    score += (1000 - nameEN.indexOf(query));
+                }
+                
+                // CAS 匹配
+                if (cas === query) score += 500;
+                else if (cas.startsWith(query)) score += 300;
+                else if (cas.includes(query)) score += 100;
+                
+                return score;
+            };
+            
+            matches.sort((a, b) => getRelevance(b) - getRelevance(a));
+            matches = matches.slice(0, 10);
             
             if (matches.length === 0) {
                 resultsDiv.innerHTML = '<div class="compat-result-item" style="color:#aaa; cursor:default; text-align:center;">未找到相符物質</div>';
@@ -1029,26 +1068,45 @@ function handleSearch() {
             }
             matches = uniqueMatches;
 
-            // 🌟 3. 智慧權重排序 (優先級：UN完全符合 > UN開頭符合 > 名稱符合 > CAS符合)
-            matches.sort((a, b) => {
-                // 權重 1: UN 完全一模一樣 (例如打 1203 就是要找 1203)
-                const aUnExact = a.un === query ? 1 : 0;
-                const bUnExact = b.un === query ? 1 : 0;
-                if (aUnExact !== bUnExact) return bUnExact - aUnExact;
-
-                // 權重 2: UN 前幾碼符合 (例如打 12 會優先顯示 1202, 1203)
-                const aUnStart = a.un.startsWith(query) ? 1 : 0;
-                const bUnStart = b.un.startsWith(query) ? 1 : 0;
-                if (aUnStart !== bUnStart) return bUnStart - aUnStart;
-
-                // 權重 3: 中文名稱包含關鍵字
-                const aNameMatch = a.nameTW.toLowerCase().includes(query) ? 1 : 0;
-                const bNameMatch = b.nameTW.toLowerCase().includes(query) ? 1 : 0;
-                if (aNameMatch !== bNameMatch) return bNameMatch - aNameMatch;
-
-                // 若以上都相同，則維持原本順序 (通常這時候就是 CAS 號碼符合的，會被排到最下面)
-                return 0;
-            });
+            // 🌟 3. 智慧相關性分數排序 (將與輸入最符合的排在最上面)
+            const getRelevance = (item) => {
+                let score = 0;
+                const nameTW = (item.nameTW || '').toLowerCase();
+                const nameEN = (item.nameEN || '').toLowerCase();
+                const un = (item.un || '');
+                const cas = (item.cas || '').toLowerCase();
+                
+                // UN 號碼匹配
+                if (un === query) score += 10000;
+                else if (un.startsWith(query)) score += 8000;
+                else if (un.includes(query)) score += 6000;
+                
+                // 中文名稱匹配
+                if (nameTW === query) score += 5000;
+                else if (nameTW.startsWith(query)) score += 4000;
+                else if (nameTW.includes(query)) {
+                    score += (2000 - nameTW.indexOf(query));
+                }
+                
+                // 英文名稱匹配
+                if (nameEN === query) score += 3000;
+                else if (nameEN.startsWith(query)) score += 2000;
+                else if (nameEN.includes(query)) {
+                    score += (1000 - nameEN.indexOf(query));
+                }
+                
+                // CAS 匹配
+                if (cas === query) score += 500;
+                else if (cas.startsWith(query)) score += 300;
+                else if (cas.includes(query)) score += 100;
+                
+                return score;
+            };
+            
+            matches.sort((a, b) => getRelevance(b) - getRelevance(a));
+            // 限制前15筆以保持流暢度
+            matches = matches.slice(0, 15);
+        });
 
             // 4. 顯示結果
 // 4. 顯示結果
