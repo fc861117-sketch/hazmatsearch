@@ -680,7 +680,7 @@
         開發者不對因使用本系統資訊所衍生之任何意外、損害或誤判承擔法律責任。
     </div>
     <!-- 引用外部資料庫檔案 -->
-    <script src="database.js?v=12"></script>
+    <script src="database.js?v=13"></script>
 
     <script>
         let currentItem = null;
@@ -1232,15 +1232,20 @@ function showDetail(item) {
                 ? `<span style="color:#ff9800; font-size:0.85rem; margin-left:4px;">(${sMeanings.join('/')})</span>` 
                 : '';
 
-            // 4. 真實 SVG 圖片資料庫讀取
+            // 4. 真實 SVG 圖片資料庫讀取 (支援並排顯示多重分類，如 Class 3, 6.1)
             const cStr = String(item.class);
-            const imgSrc = `img/class_${cStr}.svg`; 
-            const fallbackSrc = `img/class_${cStr.charAt(0)}.svg`;
             let imgHtml = '';
             if (cStr === "N/A" || !item.class) {
                 imgHtml = `<div style="width:70px; height:70px; background-color: #FFFFFF; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.8)); display:flex; align-items:center; justify-content:center; color:#333; font-size:2.2rem; font-weight:900; line-height:1; user-select:none;">❓</div>`;
             } else {
-                imgHtml = `<img src="${imgSrc}" onerror="this.onerror=null; this.src='${fallbackSrc}';" style="width:70px; height:70px; background-color: #FFFFFF; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.8));" alt="Class ${cStr}">`;
+                const classes = cStr.split(',').map(c => c.trim()).filter(c => c);
+                imgHtml = '<div style="display:flex; gap:12px; justify-content:center; align-items:center; flex-wrap:wrap;">';
+                classes.forEach(cls => {
+                    const imgSrc = `img/class_${cls}.svg`; 
+                    const fallbackSrc = `img/class_${cls.charAt(0)}.svg`;
+                    imgHtml += `<img src="${imgSrc}" onerror="this.onerror=null; this.src='${fallbackSrc}';" style="width:70px; height:70px; background-color: #FFFFFF; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.8));" alt="Class ${cls}">`;
+                });
+                imgHtml += '</div>';
             }
 
             // 5. 建立左右並排的視覺儀表板
