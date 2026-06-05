@@ -823,6 +823,19 @@
                 return unMatch || casMatch || twMatch || enMatch;
             });
             
+            // 🌟 自動去重機制：使用「UN 號碼 + 去除英文字尾後的中文名稱」作為 Key，防呆且避免顯示拼寫變體的重複項
+            const uniqueMatchesCompat = [];
+            const seenKeysCompat = new Set();
+            for (const item of matches) {
+                const cleanTW = item.nameTW.replace(/\s*\([A-Za-z0-9,\.\s\-\/]+\)\s*$/, '').trim();
+                const key = `${item.un}_${cleanTW}`;
+                if (!seenKeysCompat.has(key)) {
+                    seenKeysCompat.add(key);
+                    uniqueMatchesCompat.push(item);
+                }
+            }
+            matches = uniqueMatchesCompat;
+            
             // 智慧相關性分數排序 (將最符合的排在最上面)
             const getRelevance = (item) => {
                 let score = 0;
@@ -1056,13 +1069,14 @@ function handleSearch() {
                 (item.cas && item.cas.toLowerCase().includes(query))
             );
 
-             // 🌟 2. 自動去重機制：改用「中文名稱」防呆，避免誤殺同 UN 號碼的不同物質
+            // 🌟 2. 自動去重機制：使用「UN 號碼 + 去除英文字尾後的中文名稱」作為 Key，防呆且避免顯示拼寫變體的重複項
             const uniqueMatches = [];
-            const seenNames = new Set();
+            const seenKeys = new Set();
             for (const item of matches) {
-                // 這裡把 item.un 改成了 item.nameTW
-                if (!seenNames.has(item.nameTW)) {
-                    seenNames.add(item.nameTW);
+                const cleanTW = item.nameTW.replace(/\s*\([A-Za-z0-9,\.\s\-\/]+\)\s*$/, '').trim();
+                const key = `${item.un}_${cleanTW}`;
+                if (!seenKeys.has(key)) {
+                    seenKeys.add(key);
                     uniqueMatches.push(item);
                 }
             }
