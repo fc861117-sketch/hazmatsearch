@@ -48764,7 +48764,7 @@ const db = [
   },
   {
     "un": "3105",
-    "nameTW": "有機過氧化物D型",
+    "nameTW": "有機過氧化物 D型 (MEKP / 過氧化甲乙酮)",
     "nameEN": "Organic peroxide type D, liquid",
     "cas": "N/A",
     "class": "5.2",
@@ -49014,7 +49014,7 @@ const db = [
   },
   {
     "un": "3110",
-    "nameTW": "F 型有機過氧化物，固體 (Organic peroxide type F, solid)",
+    "nameTW": "F 型有機過氧化物，固體 (DCP / 過氧化二異丙苯 / Organic peroxide type F, solid)",
     "nameEN": "Organic peroxide type F, solid",
     "cas": "N/A",
     "class": "N/A",
