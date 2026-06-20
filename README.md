@@ -41,4 +41,4 @@
 
 ## 網站使用
 資料庫儲存於 `database.js`，可以直接與 `index.html` 一同於本地或靜態伺服器中運行。
-線上預覽：[https://fc861117-sketch.github.io/hazmatof400/](https://fc861117-sketch.github.io/hazmatof400/)
+線上預覽：[[https://fc861117-sketch.github.io/hazmatof400](https://fc861117-sketch.github.io/hazmatsearch/)/]
