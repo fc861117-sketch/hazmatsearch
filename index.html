@@ -1243,6 +1243,21 @@ function handleSearch() {
             return prefix + '$\\mathrm{Water\\ Reactive\\ Material} + \\mathrm{H_2O} \\rightarrow \\mathrm{H_2/toxic\\ gas} \\uparrow + \\mathrm{Heat}$';
         }
 
+        function getWaterReactiveWarning(item) {
+            if (!isWaterReactiveItem(item)) return '';
+            const classes = getClassList(item);
+            if (classes.includes('4.3')) {
+                return '\n【禁水】遇水會釋放易燃或毒性氣體並放熱，嚴禁用水柱或泡沫接觸物質。優先使用 D 類乾粉、乾燥砂土覆蓋，並隔離防潮。';
+            }
+            return '\n【禁水注意】此物質與水或濕氣可能反應、放熱或產生腐蝕/毒性氣體；避免水進入容器或直接接觸洩漏物。';
+        }
+
+        function getDisplayTactics(item) {
+            const tactics = item?.tactics || '';
+            if (!isWaterReactiveItem(item) || /禁水|嚴禁用水|遇水|水反應/.test(tactics)) return tactics;
+            return tactics + getWaterReactiveWarning(item);
+        }
+
 function showDetail(item) {
             currentItem = item;
             const addBtn = document.getElementById('d-add-compat-btn');
@@ -1373,6 +1388,9 @@ function showDetail(item) {
                         ghsBox.innerHTML += `<span class="ghs-badge">${icon} ${text}</span>`;
                     }
                 });
+                if (isWaterReactiveItem(item)) {
+                    ghsBox.innerHTML += `<span class="ghs-badge" style="background:#f44336;color:white;">🈲 禁水 / 遇水反應</span>`;
+                }
             }
 
             // 7. 其他戰術資訊與 ERG 動態點擊
@@ -1380,7 +1398,7 @@ function showDetail(item) {
             if (dGuide) dGuide.innerHTML = `<span class="guide-link" onclick="showErgGuide('${item.erg}')">${item.erg} 👆</span>`;
             
             if(document.getElementById('d-iso')) document.getElementById('d-iso').innerText = item.isolation;
-            if(document.getElementById('d-tactics')) document.getElementById('d-tactics').innerText = item.tactics;
+            if(document.getElementById('d-tactics')) document.getElementById('d-tactics').innerText = getDisplayTactics(item);
             if(document.getElementById('d-ppe')) document.getElementById('d-ppe').innerText = item.ppe;
             // 🌟 新增：判斷並顯示化學反應式 (支援 LaTeX)
             const rowReaction = document.getElementById('row-reaction');
